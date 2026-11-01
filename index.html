@@ -2,130 +2,64 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Para Sarah ❤️</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;text-align:center;
+  font-family:Georgia,serif;color:#fff;
+  background:linear-gradient(135deg,#ffafcc,#ffc8dd,#cdb4db);
+  overflow-x:hidden
 }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Georgia, serif;
-  color: #fff;
-  text-align: center;
-  background: linear-gradient(135deg, #ff8fab, #ffc2d1, #ffafcc);
-  overflow-x: hidden;
+main{max-width:650px;margin:auto;padding:30px 18px}
+h1{font-size:3em;text-shadow:2px 3px 8px #c9184a}
+.card{
+  background:#ffffff35;border:1px solid #ffffff70;
+  border-radius:25px;padding:25px;margin:20px 0;
+  box-shadow:0 8px 25px #a4133c22
 }
-
-main {
-  padding: 35px 20px;
-  max-width: 650px;
-  margin: auto;
+button{
+  background:#c9184a;color:white;border:0;
+  border-radius:30px;padding:14px 24px;
+  font-size:17px;cursor:pointer;margin:10px
 }
-
-h1 {
-  font-size: 3em;
-  color: #fff;
-  text-shadow: 2px 3px 8px #c9184a;
+.snoopy{font-size:75px;animation:flutuar 3s ease-in-out infinite}
+@keyframes flutuar{50%{transform:translateY(-15px)}}
+.heart{
+  position:fixed;bottom:-30px;pointer-events:none;
+  animation:subir 7s linear forwards
 }
-
-.card {
-  background: rgba(255,255,255,0.25);
-  border: 1px solid rgba(255,255,255,0.5);
-  border-radius: 25px;
-  padding: 25px;
-  margin: 20px 0;
-  box-shadow: 0 8px 30px #b5173b33;
-}
-
-button {
-  background: #c9184a;
-  color: white;
-  border: none;
-  border-radius: 30px;
-  padding: 14px 25px;
-  font-size: 17px;
-  cursor: pointer;
-  margin: 10px;
-}
-
-button:hover {
-  background: #a4133c;
-  transform: scale(1.05);
-}
-
-.heart {
-  position: fixed;
-  bottom: -30px;
-  animation: subir 7s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes subir {
-  to {
-    transform: translateY(-110vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-.snoopy {
-  font-size: 75px;
-  animation: flutuar 3s ease-in-out infinite;
-}
-
-@keyframes flutuar {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-footer {
-  padding: 25px;
-  font-size: 14px;
+@keyframes subir{
+  to{transform:translateY(-110vh) rotate(360deg);opacity:0}
 }
 </style>
 </head>
 
 <body>
-
 <main>
   <div class="snoopy">🐶❤️</div>
-
   <h1>Sarah</h1>
 
   <div class="card">
     <h2>Para o amor da minha vida</h2>
-
     <p>
       Sarah, desde que você chegou, meus dias ficaram mais bonitos.
       Seu sorriso é uma das minhas coisas favoritas no mundo.
     </p>
-
     <p>
-      Eu quero continuar criando lembranças com você,
+      Quero continuar criando lembranças com você,
       vivendo momentos incríveis e te amando cada dia mais.
     </p>
-
-    <p>
-      Você é meu lugar favorito. ❤️
-    </p>
+    <p>Você é meu lugar favorito. ❤️</p>
   </div>
 
   <div class="card">
-    <h2>Uma música para nós</h2>
-    <p>There's Nothing Holdin' Me Back — Shawn Mendes</p>
-
-    <iframe
-      width="100%"
-      height="200"
-      src="https://www.youtube.com/embed/dT2owtrxM8k"
-      title="Música para Sarah"
-      frameborder="0"
-      allow="encrypted-media; picture-in-picture"
-      allowfullscreen>
-    </iframe>
+    <h2>Uma musiquinha para você 🎹</h2>
+    <p>Uma melodia feita especialmente para você, meu amor.</p>
+    <button id="play">▶ Tocar nossa música</button>
+    <button id="pause">⏸ Pausar</button>
   </div>
 
   <div class="card">
@@ -134,28 +68,79 @@ footer {
     <p id="mensagem"></p>
   </div>
 
-  <footer>
-    Feito com muito amor para Sarah ❤️
-  </footer>
+  <footer>Feito com muito amor para Sarah ❤️</footer>
 </main>
 
 <script>
-function surpresa() {
-  document.getElementById("mensagem").innerHTML =
+let audio, timer, tocando=false, nota=0;
+
+const notas=[
+  261.63,329.63,392.00,329.63,
+  293.66,349.23,440.00,349.23,
+  261.63,329.63,392.00,523.25,
+  440.00,392.00,329.63,293.66
+];
+
+function tocarNota(freq){
+  const ctx=audio;
+  const osc=ctx.createOscillator();
+  const ganho=ctx.createGain();
+
+  osc.type="sine";
+  osc.frequency.value=freq;
+  ganho.gain.setValueAtTime(0.0001,ctx.currentTime);
+  ganho.gain.exponentialRampToValueAtTime(0.12,ctx.currentTime+0.04);
+  ganho.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.65);
+
+  osc.connect(ganho);
+  ganho.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime+0.7);
+}
+
+async function iniciar(){
+  if(!audio) audio=new(window.AudioContext||window.webkitAudioContext)();
+  await audio.resume();
+
+  if(tocando)return;
+  tocando=true;
+
+  timer=setInterval(()=>{
+    tocarNota(notas[nota%notas.length]);
+    nota++;
+  },450);
+
+  document.getElementById("play").textContent="🎵 Música tocando";
+}
+
+function parar(){
+  clearInterval(timer);
+  tocando=false;
+  document.getElementById("play").textContent="▶ Tocar nossa música";
+}
+
+document.getElementById("play").onclick=iniciar;
+document.getElementById("pause").onclick=parar;
+
+// Tenta iniciar automaticamente; alguns celulares exigem toque.
+window.addEventListener("load",()=>{
+  iniciar().catch(()=>{});
+});
+
+function surpresa(){
+  document.getElementById("mensagem").textContent=
     "Eu te amo, Sarah! Obrigado por fazer parte da minha vida. ❤️";
 
-  for (let i = 0; i < 20; i++) {
-    let coracao = document.createElement("div");
-    coracao.className = "heart";
-    coracao.innerHTML = "❤️";
-    coracao.style.left = Math.random() * 100 + "vw";
-    coracao.style.animationDuration = (3 + Math.random() * 4) + "s";
-    document.body.appendChild(coracao);
-
-    setTimeout(() => coracao.remove(), 7000);
+  for(let i=0;i<25;i++){
+    let h=document.createElement("div");
+    h.className="heart";
+    h.textContent="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=(3+Math.random()*4)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),7000);
   }
 }
 </script>
-
 </body>
 </html>
