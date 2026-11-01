@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Sarah ❤️</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Georgia, serif;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(135deg, #ff8fab, #ffc2d1, #ffafcc);
+  overflow-x: hidden;
+}
+
+main {
+  padding: 35px 20px;
+  max-width: 650px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 3em;
+  color: #fff;
+  text-shadow: 2px 3px 8px #c9184a;
+}
+
+.card {
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 25px;
+  padding: 25px;
+  margin: 20px 0;
+  box-shadow: 0 8px 30px #b5173b33;
+}
+
+button {
+  background: #c9184a;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 25px;
+  font-size: 17px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+button:hover {
+  background: #a4133c;
+  transform: scale(1.05);
+}
+
+.heart {
+  position: fixed;
+  bottom: -30px;
+  animation: subir 7s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes subir {
+  to {
+    transform: translateY(-110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.snoopy {
+  font-size: 75px;
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+@keyframes flutuar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+footer {
+  padding: 25px;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+  <div class="snoopy">🐶❤️</div>
+
+  <h1>Sarah</h1>
+
+  <div class="card">
+    <h2>Para o amor da minha vida</h2>
+
+    <p>
+      Sarah, desde que você chegou, meus dias ficaram mais bonitos.
+      Seu sorriso é uma das minhas coisas favoritas no mundo.
+    </p>
+
+    <p>
+      Eu quero continuar criando lembranças com você,
+      vivendo momentos incríveis e te amando cada dia mais.
+    </p>
+
+    <p>
+      Você é meu lugar favorito. ❤️
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Uma música para nós</h2>
+    <p>There's Nothing Holdin' Me Back — Shawn Mendes</p>
+
+    <iframe
+      width="100%"
+      height="200"
+      src="https://www.youtube.com/embed/dT2owtrxM8k"
+      title="Música para Sarah"
+      frameborder="0"
+      allow="encrypted-media; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="card">
+    <h2>Uma surpresa para você 💌</h2>
+    <button onclick="surpresa()">Clique aqui, meu amor</button>
+    <p id="mensagem"></p>
+  </div>
+
+  <footer>
+    Feito com muito amor para Sarah ❤️
+  </footer>
+</main>
+
+<script>
+function surpresa() {
+  document.getElementById("mensagem").innerHTML =
+    "Eu te amo, Sarah! Obrigado por fazer parte da minha vida. ❤️";
+
+  for (let i = 0; i < 20; i++) {
+    let coracao = document.createElement("div");
+    coracao.className = "heart";
+    coracao.innerHTML = "❤️";
+    coracao.style.left = Math.random() * 100 + "vw";
+    coracao.style.animationDuration = (3 + Math.random() * 4) + "s";
+    document.body.appendChild(coracao);
+
+    setTimeout(() => coracao.remove(), 7000);
+  }
+}
+</script>
+
+</body>
+</html>
